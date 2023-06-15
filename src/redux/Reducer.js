@@ -63,7 +63,7 @@ const productReducer = (state = {product: null}, action) => {
             const data = {
                 "downloaded": state.product.downloaded + 1
             }
-            fetch(`http://localhost:9810/products/${state.product.id}`, {
+            fetch(`https://server-share-code.onrender.com/products/${state.product.id}`, {
                 method: "PATCH",
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(data)
@@ -81,7 +81,7 @@ const productReducer = (state = {product: null}, action) => {
             const data = {
                 "viewed": state.product.viewed + 1
             }
-            fetch(`http://localhost:9810/products/${state.product.id}`, {
+            fetch(`https://server-share-code.onrender.com/products/${state.product.id}`, {
                 method: "PATCH",
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(data)
@@ -102,7 +102,7 @@ const productReducer = (state = {product: null}, action) => {
                     [action.payload]: state.product.rating[action.payload] + 1
                 }
             }
-            fetch(`http://localhost:9810/products/${state.product.id}`, {
+            fetch(`https://server-share-code.onrender.com/products/${state.product.id}`, {
                 method: "PATCH",
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(data)
@@ -120,7 +120,7 @@ const productReducer = (state = {product: null}, action) => {
             const data = {
                 'rating-comment': [...state.product['rating-comment'], {...action.payload}]
             }
-            fetch(`http://localhost:9810/products/${state.product.id}`, {
+            fetch(`https://server-share-code.onrender.com/products/${state.product.id}`, {
                 method: "PATCH",
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(data)
@@ -141,7 +141,7 @@ const productReducer = (state = {product: null}, action) => {
                     action.payload
                 ]
             }
-            fetch(`http://localhost:9810/products/${state.product.id}`, {
+            fetch(`https://server-share-code.onrender.com/products/${state.product.id}`, {
                 method: "PATCH",
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(data)

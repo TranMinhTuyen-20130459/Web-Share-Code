@@ -3,7 +3,7 @@ import {hashText} from "../utils/Utils_Tai";
 
 export async function checkEmailExists(email) {
     try {
-        const url = `http://localhost:9810/api/accounts?email=${encodeURIComponent(email)}`;
+        const url = `https://server-share-code.onrender.com/api/accounts?email=${encodeURIComponent(email)}`;
         const response = await fetch(url);
         if (!response.ok) {
             throw new Error('Network response was not ok.');
@@ -17,7 +17,7 @@ export async function checkEmailExists(email) {
 
 export async function addAccount(account) {
     try {
-        const url = 'http://localhost:9810/api/accounts';
+        const url = 'https://server-share-code.onrender.com/api/accounts';
         const response = await fetch(url, {
             method: 'POST',
             headers: {
@@ -36,7 +36,7 @@ export async function addAccount(account) {
 }
 export async function checkLogin(email, passwordEnter) {
     try {
-        const url = `http://localhost:9810/api/accounts?email=${encodeURIComponent(email)}`;
+        const url = `https://server-share-code.onrender.com/api/accounts?email=${encodeURIComponent(email)}`;
         const response = await fetch(url);
         if (!response.ok) {
             throw new Error('Network response was not ok.');
@@ -56,7 +56,7 @@ export async function checkLogin(email, passwordEnter) {
 export async function changePassword(email, newPassword) {
     try {
         const hashPass = hashText(newPassword);
-        const url = `http://localhost:9810/api/accounts/?email=${encodeURIComponent(email)}`;
+        const url = `https://server-share-code.onrender.com/api/accounts/?email=${encodeURIComponent(email)}`;
         const response = await fetch(url);
         if (!response.ok) {
             throw new Error('Failed to fetch account data.');
@@ -67,7 +67,7 @@ export async function changePassword(email, newPassword) {
             throw new Error('Account not found.');
         }
         account.hashPass = hashPass;
-        const updateResponse = await fetch(`http://localhost:9810/api/accounts/${account.id}`, {
+        const updateResponse = await fetch(`https://server-share-code.onrender.com/api/accounts/${account.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -83,14 +83,14 @@ export async function changePassword(email, newPassword) {
     }
 }
 export async function getProvinces() {
-    const url = "http://localhost:9810/api/provinces";
+    const url = "https://server-share-code.onrender.com/api/provinces";
     const response = await fetch(url);
     const data = await response.json();
     return data;
 }
 export async function loadInfo(email){
     try {
-        const url = `http://localhost:9810/api/accounts/?email=${encodeURIComponent(email)}`;
+        const url = `https://server-share-code.onrender.com/api/accounts/?email=${encodeURIComponent(email)}`;
         const response = await fetch(url);
         if (!response.ok) {
             throw new Error('Failed to fetch account data.');
@@ -101,7 +101,7 @@ export async function loadInfo(email){
             throw new Error('Account not found.');
         }
 
-        const updateResponse = await fetch(`http://localhost:9810/api/accounts/${account.id}`);
+        const updateResponse = await fetch(`https://server-share-code.onrender.com/api/accounts/${account.id}`);
         if (!updateResponse.ok) {
             throw new Error('Failed to update password.');
         }
@@ -114,7 +114,7 @@ export async function loadInfo(email){
 }
 export async function changeProfile(email, data) {
     try {
-        const url = `http://localhost:9810/api/accounts/?email=${encodeURIComponent(email)}`;
+        const url = `https://server-share-code.onrender.com/api/accounts/?email=${encodeURIComponent(email)}`;
         const response = await fetch(url);
         if (!response.ok) {
             throw new Error('Failed to fetch account data.');
@@ -130,7 +130,7 @@ export async function changeProfile(email, data) {
         account.personal_email = data.personal_email;
         account.address = data.address;
         account.province = data.province;
-        const updateResponse = await fetch(`http://localhost:9810/api/accounts/${account.id}`, {
+        const updateResponse = await fetch(`https://server-share-code.onrender.com/api/accounts/${account.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

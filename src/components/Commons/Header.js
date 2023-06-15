@@ -12,7 +12,7 @@ function HeaderAds() {
     const [adsIndex, setAdsIndex] = useState(0)
 
     useEffect(() => {
-        fetch('http://localhost:9810/ads')
+        fetch('https://server-share-code.onrender.com/ads')
             .then(value => value.json())
             .then(json => setAdsList(json))
     }, [])
@@ -161,7 +161,7 @@ function HeaderSearch() {
     const navigate = useNavigate()
 
     useEffect(() => {
-        fetch(`http://localhost:9810/products`)
+        fetch(`https://server-share-code.onrender.com/products`)
             .then(res => res.json())
             .then(json => setTypes(getTypes(json)))
     }, [])

@@ -14,7 +14,7 @@ import {Toast} from "react-bootstrap";
 export function PopularCode() {
     const [data, setData] = useState([])
     useEffect(() => {
-        fetch('http://localhost:9810/products?_sort=downloaded,viewed&_order=desc&_limit=10')
+        fetch('https://server-share-code.onrender.com/products?_sort=downloaded,viewed&_order=desc&_limit=10')
             .then(res => res.json())
             .then(json => setData(json.data))
     }, [])
@@ -41,7 +41,7 @@ export function SideBar() {
     const navigate = useNavigate()
 
     useEffect(() => {
-        fetch(`http://localhost:9810/products`)
+        fetch(`https://server-share-code.onrender.com/products`)
             .then(res => res.json())
             .then(json => setTypes(getTypes(json)))
     }, [])

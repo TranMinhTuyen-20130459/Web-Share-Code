@@ -30,7 +30,7 @@ function DataProductsFeatured() {
             try {
                 //_limit=8&_page=1
                 const paramsString = queryString.stringify(filters) // => chuyển object sang chuỗi
-                const requestUrl = `http://localhost:9810/api/products-featured?${paramsString}`
+                const requestUrl = `https://server-share-code.onrender.com/api/products-featured?${paramsString}`
 
                 // Gửi yêu cầu GET đến API và chờ nhận được phản hồi
                 const response = await fetch(requestUrl);

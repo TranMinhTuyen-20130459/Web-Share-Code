@@ -1,6 +1,6 @@
 export async function getListDiscountCode() {
     try {
-        const response = await fetch('http://localhost:9810/api/discount-code');
+        const response = await fetch('https://server-share-code.onrender.com/api/discount-code');
         const responseJson = await response.json();
         return responseJson;
     } catch (e) {
