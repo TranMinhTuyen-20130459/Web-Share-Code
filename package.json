@@ -39,7 +39,8 @@
     ]
   },
   "scripts": {
-    "start:app": "react-scripts start"
+    "start:app": "react-scripts start",
+    "build": "react-scripts build"
   },
   "browserslist": {
     "production": [
