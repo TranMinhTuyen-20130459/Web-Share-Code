@@ -451,7 +451,7 @@ export default function ProductDetails() {
     const {id} = useParams()
 
     useMemo(() => {
-        fetchCodes(`http://localhost:9810/products/${id}`).then(json => {
+        fetchCodes(`https://server-share-code.onrender.com/products/${id}`).then(json => {
             setProduct(json)
             setProduct(product => ({...product, viewed: product.viewed + 1}))
             setLoading(false)
@@ -459,7 +459,7 @@ export default function ProductDetails() {
     }, [id])
 
     useEffect(() => {
-        putCodes(`http://localhost:9810/products/${product.id}`, {
+        putCodes(`https://server-share-code.onrender.com/products/${product.id}`, {
             method: "PATCH",
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(product)

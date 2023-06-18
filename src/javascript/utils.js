@@ -43,7 +43,7 @@ export const makeURL = (search, from, type, page, sort) => {
     const typePart = type != null ? `type.id=${type}&` : ''
     const pagePart = page != null ? `_page=${page}&_limit=12&` : ''
     const sortPart = sort != null ? `_sort=${sort}&_order=desc` : ''
-    return trim(trim(`http://localhost:9810/products?${searchPart}${fromPart}${typePart}${pagePart}${sortPart}`, '&'), '?')
+    return trim(trim(`https://server-share-code.onrender.com/products?${searchPart}${fromPart}${typePart}${pagePart}${sortPart}`, '&'), '?')
 }
 
 export const buildQuery = (ids) => {
@@ -51,7 +51,7 @@ export const buildQuery = (ids) => {
     for (let id of ids) {
         query = query + `id=${id}&`
     }
-    return trim(trim(`http://localhost:9810/products?${query}`, '&'), '?')
+    return trim(trim(`https://server-share-code.onrender.com/products?${query}`, '&'), '?')
 }
 
 function trim(s, c) {
