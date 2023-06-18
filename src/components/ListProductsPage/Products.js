@@ -1,22 +1,22 @@
-import Header from '../Commons/Header';
-import Footer from '../Commons/Footer';
-
 import '../../css/products.css'
 import React, {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {addLiked, setLayout, setPage, setSort, setType} from "../../redux/Action";
-import {Link, useLocation, useNavigate} from "react-router-dom";
+import {addLiked, setLayout, setPage, setSort} from "../../redux/Action";
+import {Link, Outlet, useLocation, useNavigate} from "react-router-dom";
 import {StarRate} from "../ProductDetailPage/ProductDetails";
-import {formatNumber, formatRating, getTypes, makeURL} from "../../javascript/utils";
+import {formatNumber, formatRating, getTypeName, getTypes, makeURL} from "../../javascript/utils";
 import {addItemToCart} from "../../redux/redux_tuyen/Action_Tuyen";
 import {Toast} from "react-bootstrap";
+import Header from "../Commons/Header";
+import Footer from "../Commons/Footer";
+import SectionBreadcrumb from "../Commons/SectionBreadcrumb";
+import {fetchCodes, fetchPopularCodes, fetchProducts} from "../../javascript/api/Api_Dat";
 
 export function PopularCode() {
     const [data, setData] = useState([])
+
     useEffect(() => {
-        fetch('https://server-share-code.onrender.com/products?_sort=downloaded,viewed&_order=desc&_limit=10')
-            .then(res => res.json())
-            .then(json => setData(json.data))
+        fetchPopularCodes().then(json => setData(json.data))
     }, [])
 
     return (
@@ -24,7 +24,7 @@ export function PopularCode() {
             <h6 className="list-group-item">Code phổ biến</h6>
             <div className="list-group">
                 {data.map((product) => (
-                    <Link to={`product/${product.id}`} state={product} className="list-group-item" key={product.id}>
+                    <Link to={`/products/product/${product.id}`} state={product} className="list-group-item" key={product.id}>
                         <img className="mr-2" src={product.img} alt=""/>
                         <span className="popular-title">{product.name}</span>
                     </Link>
@@ -34,23 +34,19 @@ export function PopularCode() {
     )
 }
 
-export function SideBar() {
-    const type = useSelector(state => state.listProductsReducer.type)
+export function SideBar({type}) {
     const [types, setTypes] = useState([])
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
     useEffect(() => {
-        fetch(`https://server-share-code.onrender.com/products`)
-            .then(res => res.json())
-            .then(json => setTypes(getTypes(json)))
+        fetchProducts().then(data => setTypes(getTypes(data)))
     }, [])
 
     function handleClick(type) {
-        dispatch(setType(type))
         dispatch(setPage(1))
         dispatch(setSort(null))
-        navigate(`/top-codes/type=${type}`)
+        navigate(`/products?type=${type}`)
     }
 
     return (
@@ -62,10 +58,10 @@ export function SideBar() {
                         <div className={`list-group-item ${value.id === type && 'item-active'}`} key={value.id}
                              onClick={() => handleClick(value.id)}>
                             <div className="list-group-item-left">
-                                <span><img src={value.img} alt=""/></span>
+                                <span><img src={value.id === type ? value.img.replace('-alt', '') : value.img} alt=""/></span>
                                 <span>{value.name}</span>
                             </div>
-                            <span className="badge badge-light">{value.quantity}</span>
+                            <span className="badge badge-light" style={{backgroundColor: `${value.id === type && 'white'}`}}>{value.quantity}</span>
                         </div>
                     ))}
                 </div>
@@ -86,9 +82,9 @@ export function ProductItemRow({p, navigate, addToLiked, addToCart}) {
                 </Link>
                 <div className="product-item-row-content col-lg-6">
                     <Link to={`product/${p.id}`} state={p} className="product-item-row-title">{p.name}</Link>
-                    <div className="product-item-brand">
-                        <img src={p.type.img} alt=""
-                             onClick={() => navigate({id: p.type.id, name: p.type.name})}/> {p.type.name}</div>
+                    <div className="product-item-brand" onClick={() => navigate(p.type.id)}>
+                        <img src={p.type.img.replace('-alt', '')} alt=""/> {p.type.name}
+                    </div>
                     <div className="product-item-stars"><StarRate stars={formatRating(p.rating).average} type={"bi bi-star-fill"}/></div>
                     <div className="product-item-stats d-flex justify-content-start">
                         <div><i className="fa fa-eye"></i> {p.viewed}</div>
@@ -132,12 +128,12 @@ export function ProductItem({p, navigate, addToLiked, addToCart}) {
                 </Toast>
             </div>
             <div className="product-item">
-                <Link to={`product/${p.id}`} state={p} className="product-item-img">
+                <Link to={`/products/product/${p.id}`} state={p} className="product-item-img">
                     <img src={p.img} alt=""/>
                 </Link>
                 <div className="product-item-title d-flex justify-content-center align-items-center text-center pt-2">
                     <div className="title-wrapper">
-                        <Link to={`product/${p.id}`} state={p}>{p.name}</Link>
+                        <Link to={`/products/product/${p.id}`} state={p}>{p.name}</Link>
                     </div>
                 </div>
                 <div className="product-item-stats d-flex justify-content-between">
@@ -154,57 +150,15 @@ export function ProductItem({p, navigate, addToLiked, addToCart}) {
                     <div className="product-item-stars"><StarRate stars={formatRating(p.rating).average} type={"bi bi-star-fill"}/></div>
                 </div>
                 <div className="product-item-bottom d-flex justify-content-between align-items-center">
-                    <div className="product-item-brand" onClick={() => navigate({id: p.type.id, name: p.type.name})}>
-                        <img src={p.type.img} alt=""></img> {p.type.name}
+                    <div className="product-item-brand" onClick={() => navigate(p.type.id)}>
+                        <img src={p.type.img.replace('-alt', '')} alt=""></img> {p.type.name}
                     </div>
-                    <Link to={`product/${p.id}`} state={p}
+                    <Link to={`/products/product/${p.id}`} state={p}
                           className="product-item-price">{p.price === 0 ? 'FREE' : formatNumber(p.price, '.') + 'đ'}</Link>
                 </div>
             </div>
         </>
 
-    )
-}
-
-export function ProductContainer({query, total, data, forLiked}) {
-    const layout = useSelector(state => state.listProductsReducer.layout)
-    const dispatch = useDispatch()
-
-    function navigate(type) {
-        dispatch(setType(type.id))
-        dispatch(setPage(1))
-    }
-
-    function addToLiked(code) {
-        dispatch(addLiked(code))
-    }
-
-    function addToCart(code) {
-        dispatch(addItemToCart(code))
-    }
-
-    return (
-        <>
-            {total ? (
-                <div className="row">
-                    {data.map((value, index) => {
-                        return layout === 'grid' ?
-                            (<div className={`product-item-container col-lg-${forLiked ? '3' : '4'}`} key={index}>
-                                <ProductItem p={value} navigate={navigate} addToLiked={addToLiked} addToCart={addToCart}/>
-                            </div>) :
-                            (<div className="product-item-container col-lg-12" key={index}>
-                                <ProductItemRow p={value} navigate={navigate} addToLiked={addToLiked} addToCart={addToCart}/>
-                            </div>)
-                    })}
-                </div>
-            ) : (
-                <div className="search-not-found">
-                    {forLiked ? <img src={require('../../img/empty.png')} alt=""/> : <img src={require('../../img/not_found.jpg')} alt=""/>}
-                    {forLiked ? <div>Danh mục yêu thích trống</div> : <div>Không có kết quả</div>}
-                    {!forLiked && <div>Không tìm thấy code cho từ khóa <span>{query}</span></div>}
-                </div>
-            )}
-        </>
     )
 }
 
@@ -267,49 +221,106 @@ export function Pagination({total}) {
     )
 }
 
-function Products() {
+export function ProductContainer({query, total, data, forLiked}) {
+    const layout = useSelector(state => state.listProductsReducer.layout)
+    const dispatch = useDispatch()
+    const nav = useNavigate()
+
+    function navigate(type) {
+        dispatch(setPage(1))
+        dispatch(setSort(null))
+        nav(`/products?type=${type}`)
+    }
+
+    function addToLiked(code) {
+        dispatch(addLiked(code))
+    }
+
+    function addToCart(code) {
+        dispatch(addItemToCart(code))
+    }
+
+    return (
+        <>
+            {total ? (
+                <div className="row">
+                    {data.map((value, index) => {
+                        return layout === 'grid' ?
+                            (<div className={`product-item-container col-lg-${forLiked ? '3' : '4'}`} key={index}>
+                                <ProductItem p={value} navigate={navigate} addToLiked={addToLiked} addToCart={addToCart}/>
+                            </div>) :
+                            (<div className="product-item-container col-lg-12" key={index}>
+                                <ProductItemRow p={value} navigate={navigate} addToLiked={addToLiked} addToCart={addToCart}/>
+                            </div>)
+                    })}
+                </div>
+            ) : (
+                <div className="search-not-found">
+                    {forLiked ? <img src={require('../../img/empty.png')} alt=""/> : <img src={require('../../img/not_found.jpg')} alt=""/>}
+                    {forLiked ? <div>Danh mục yêu thích trống</div> : <div>Không có kết quả</div>}
+                    {!forLiked && <div>Không tìm thấy code cho từ khóa <span>{query}</span></div>}
+                </div>
+            )}
+        </>
+    )
+}
+
+export function ProductsContent({group}) {
     const page = useSelector(state => state.listProductsReducer.page)
-    const type = useSelector(state => state.listProductsReducer.type)
     const sort = useSelector(state => state.listProductsReducer.sort)
     const [products, setProducts] = useState([])
     const refTotal = useRef(0)
     const location = useLocation()
+    const type = new URLSearchParams(location.search).get('type')
     const query = new URLSearchParams(location.search).get('search')
     const from = new URLSearchParams(location.search).get('from')
 
     useEffect(() => {
-        const url = makeURL(query, from, type, page, sort)
-        fetch(url)
-            .then(res => res.json())
-            .then(json => {
-                setProducts(json.data)
-                refTotal.current = json.total
-            })
-    }, [page, type, sort, query, from])
+        const url = makeURL(query, from, type, page, sort) +
+            (group === 'quality' ? '&viewed_gte=5000&downloaded_gte=500&price_gte=500000' : '') +
+            (group === 'free' ? '&price=0' : '')
+        fetchCodes(url).then(json => {
+            setProducts(json.data)
+            refTotal.current = json.total
+        })
+    }, [page, sort, type, query, from])
+
+    function breadcrumbs() {
+        const home = {name: 'Trang chủ', link: '/'}
+        const ds = location.pathname.includes('products') ? {name: 'Danh sách codes', link: '/products'} : undefined
+        const t = type && {name: getTypeName(type), link: `/products?type=${type}`}
+        const tc = location.pathname.includes('top-codes') ? {name: 'Top codes', link: '/top-codes'} : undefined
+        const qc = location.pathname.includes('quality-codes') ? {name: 'Code chất lượng', link: '/quality-codes'} : undefined
+        const fc = location.pathname.includes('free-codes') ? {name: 'Code miễn phí', link: '/free-codes'} : undefined
+        return [home, ds, t, tc, qc, fc].filter(i => i)
+    }
 
     return (
-        <section className="product">
-            <div className="container">
-                <div className="row">
-                    <div className="col-lg-3 col-md-5">
-                        <SideBar/>
-                    </div>
-                    <div className="col-lg-9 col-md-7 pl-4">
-                        <Filter total={refTotal.current}/>
-                        <ProductContainer query={query} total={refTotal.current} data={products}/>
-                        <Pagination total={refTotal.current}/>
+        <>
+            <SectionBreadcrumb breadcrumbs={breadcrumbs()}/>
+            <section className="product">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-lg-3 col-md-5">
+                            <SideBar type={type}/>
+                        </div>
+                        <div className="col-lg-9 col-md-7 pl-4">
+                            <Filter total={refTotal.current}/>
+                            <ProductContainer query={query} total={refTotal.current} data={products}/>
+                            <Pagination total={refTotal.current}/>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        </>
     )
 }
 
-export default function ListProducts() {
+export default function Products() {
     return (
         <>
             <Header/>
-            <Products/>
+            <Outlet/>
             <Footer/>
         </>
     )

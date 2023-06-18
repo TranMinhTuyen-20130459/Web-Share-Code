@@ -46,10 +46,10 @@
 }
 
 .sidebar-item .list-group .list-group-item.item-active {
-    background-color: #d2dde5;
+    background-color: #dde6e9;
     font-weight: bold;
-    color: #333333;
-    border-color: #d2dde5;
+    color: #424242;
+    border-color: #dde6e9;
 }
 
 .sidebar-item .list-group .list-group-item.item-active .badge {
@@ -66,7 +66,7 @@
 }
 
 .sidebar-item .list-group-item img {
-    min-width: 23px !important;
+    min-width: 23px;
     height: 23px;
 }
 
@@ -84,6 +84,12 @@
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+}
+
+.sidebar-item.sidebar-popular .list-group-item img {
+    min-width: 43px;
+    height: 43px;
+    border-radius: 5px;
 }
 
 .filters {
@@ -204,6 +210,11 @@
     -webkit-box-orient: vertical;
 }
 
+.product-item .product-item-title .title-wrapper:hover a {
+    color: var(--color-main) !important;
+    transition: .25s;
+}
+
 .product-item-actions {
     padding: 10px;
     border-bottom: 1px solid #dee5e7;
@@ -267,8 +278,8 @@
 
 .action-like.is-active {
     color: #fff;
-    background-color: #fd88fb;
-    border-color: #fd88fb;
+    background-color: #2f5a93;
+    border-color: #2f5a93;
     transition: .05s;
     -webkit-animation: 0.8s;
     animation: 0.8s;
@@ -285,7 +296,7 @@
     height: 6px;
     border-radius: 100%;
     transform: scale(0);
-    color: #fd88fb;
+    color: rgba(59, 98, 150, 0.89);
     border: 1px solid transparent;
     box-shadow: -0.8em 0 0 -2px, 0.8em 0 0 -2px, 0 -0.8em 0 -2px, 0 0.8em 0 -2px, -0.6em -0.6em 0 -2px, -0.6em 0.6em 0 -2px, 0.6em -0.6em 0 -2px, 0.6em 0.6em 0 -2px;
 }
@@ -354,10 +365,16 @@
     max-width: 60%;
     overflow: hidden;
     white-space: nowrap;
+    color: #859298;
     text-overflow: ellipsis;
     display: flex;
     align-items: center;
     line-height: 18px;
+    transition: .2s;
+}
+
+.product-item-brand:hover {
+    color: black;
 }
 
 .product-item-brand img {
@@ -399,7 +416,7 @@
 }
 
 .product-item-row-title {
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 700;
     color: #2c3944 !important;
     cursor: pointer;
@@ -411,14 +428,20 @@
 }
 
 .product-item-row-title:hover {
-    color: #1c252c !important;
+    color: var(--color-main) !important;
+    transition: .25s;
 }
 
 .product-item-row .product-item-brand {
     font-size: 14px;
     display: flex;
     align-items: center;
-    color: #50595d;
+    color: #859298;
+    transition: .2s;
+}
+
+.product-item-row .product-item-brand:hover {
+    color: black;
 }
 
 .product-item-row-price {

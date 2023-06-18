@@ -1,9 +1,11 @@
 import Header from "./Header";
 import Footer from "./Footer";
 import {useSelector} from "react-redux";
-import {ProductContainer} from "../TopCodePage/ListProducts";
 import {buildQuery} from "../../javascript/utils";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
+import {ProductContainer} from "../ListProductsPage/Products";
+import SectionBreadcrumb from "./SectionBreadcrumb";
+import {fetchCodes} from "../../javascript/api/Api_Dat";
 
 export function Codes() {
     const likedCodes = useSelector(state => state.likedCodesReducer.liked)
@@ -12,20 +14,23 @@ export function Codes() {
 
     useEffect(() => {
         if (ids.length > 0) {
-            fetch(buildQuery(ids))
-                .then(value => value.json())
-                .then(json => {
-                    setData(json.data)
-                })
+            fetchCodes(buildQuery(ids)).then(json => setData(json.data))
         } else {
             setData(likedCodes)
         }
     }, [ids, likedCodes, setData])
 
+    function breadcrumbs() {
+        return [{name: 'Trang chủ', link: '/'}, {name: 'Codes đã thích', link: '/liked-codes'}]
+    }
+
     return (
-        <div className="container">
-            <ProductContainer total={data.length} data={data} forLiked={true}/>
-        </div>
+        <>
+            <SectionBreadcrumb breadcrumbs={breadcrumbs()}/>
+            <div className="container">
+                <ProductContainer total={data.length} data={data} forLiked={true}/>
+            </div>
+        </>
     )
 }
 

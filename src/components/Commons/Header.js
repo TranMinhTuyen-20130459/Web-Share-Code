@@ -3,9 +3,9 @@ import {useEffect, useState} from "react";
 import Cart from './Cart'
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import $ from 'jquery'
-import {getTypes} from "../../javascript/utils"
+import {getTypeName, getTypes} from "../../javascript/utils"
 import {useDispatch} from "react-redux";
-import {setPage, setSort, setType} from "../../redux/Action";
+import {setLayout, setPage, setSort, setType} from "../../redux/Action";
 
 function HeaderAds() {
     const [adsList, setAdsList] = useState([])
@@ -18,7 +18,6 @@ function HeaderAds() {
     }, [])
 
     useEffect(() => {
-        console.log(`INDEX: ${adsIndex}`)
         const id = setTimeout(() => setAdsIndex((adsIndex + 1) % adsList.length), 5000)
         return () => clearTimeout(id)
     }, [adsIndex, adsList.length])
@@ -92,7 +91,17 @@ function HeaderTop() {
 }
 
 function HeaderMenu() {
+    const navigate = useNavigate()
     const location = useLocation()
+    const dispatch = useDispatch()
+
+    function handledLink(link) {
+        dispatch(setPage(1))
+        dispatch(setSort(null))
+        dispatch(setLayout('grid'))
+        navigate(link)
+    }
+
     return (
         <div className="container">
             <div className="row">
@@ -104,13 +113,16 @@ function HeaderMenu() {
                 <div className="col-lg-8 d-flex justify-content-center align-items-center">
                     <nav className="header-menu">
                         <ul>
-                            <li><Link to="/" className={location.pathname === '/' && 'active'}>Trang chủ</Link></li>
-                            <li><Link to="/top-codes" className={location.pathname.indexOf('top-codes') > 0 && 'active'}>Top code</Link></li>
-                            <li><Link to="/quality-codes" className={location.pathname.indexOf('quality-codes') > 0 && 'active'}>Code chất
-                                lượng</Link>
+                            <li><span onClick={() => handledLink('/')} className={location.pathname === '/' && 'active'}>Trang chủ</span></li>
+                            <li><span onClick={() => handledLink('/top-codes')}
+                                      className={location.pathname.indexOf('top-codes') > 0 && 'active'}>Top code</span></li>
+                            <li><span onClick={() => handledLink('/quality-codes')}
+                                      className={location.pathname.indexOf('quality-codes') > 0 && 'active'}>Code chất
+                                lượng</span>
                                 <img src={require('../../img/ic_hot.gif')} alt=""/>
                             </li>
-                            <li><Link to="/free-codes" className={location.pathname.indexOf('free-codes') > 0 && 'active'}>Code miễn phí</Link></li>
+                            <li><span onClick={() => handledLink('/free-codes')}
+                                      className={location.pathname.indexOf('free-codes') > 0 && 'active'}>Code miễn phí</span></li>
                         </ul>
                     </nav>
                 </div>
@@ -130,7 +142,7 @@ function CodeCategories({types}) {
         dispatch(setType(typeId))
         dispatch(setPage(1))
         dispatch(setSort(null))
-        navigate(`/top-codes/type=${typeId}`)
+        navigate(`/products?type=${typeId}`)
     }
 
     return (
@@ -154,7 +166,11 @@ function CodeCategories({types}) {
 }
 
 function HeaderSearch() {
-    const [search, setSearch] = useState({})
+    const location = useLocation()
+    const [search, setSearch] = useState({
+        query: new URLSearchParams(location.search).get('search'),
+        from: new URLSearchParams(location.search).get('from')
+    })
     const [types, setTypes] = useState([])
     const [toggle, setToggle] = useState(false)
     const dispatch = useDispatch()
@@ -172,10 +188,10 @@ function HeaderSearch() {
 
     function handleSubmit(event) {
         event.preventDefault()
-        dispatch(setType(null))
         dispatch(setPage(1))
         dispatch(setSort(null))
-        navigate(`/top-codes?search=${search.query}${search.from ? `&from=${search.from}` : ''}`)
+        dispatch(setLayout('grid'))
+        navigate(`/products?search=${search.query}${search.from ? `&from=${search.from}` : ''}`)
     }
 
     return (
@@ -193,7 +209,7 @@ function HeaderSearch() {
                                      $('.header-search-categories ul').slideToggle(300)
                                      setToggle(!toggle)
                                  }}>
-                                <span className="position-relative align-middle">{search.from || 'TẤT CẢ CODE'} <i
+                                <span className="position-relative align-middle">{search.from ? getTypeName(search.from) : 'TẤT CẢ CODE'} <i
                                     className={toggle ? "fa fa-caret-up" : "fa fa-caret-down"}></i></span>
                                 <ul>
                                     {types.map(type => (
