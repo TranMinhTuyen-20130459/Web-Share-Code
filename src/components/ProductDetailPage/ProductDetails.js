@@ -7,8 +7,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {addLiked} from "../../redux/Action";
 import {addItemToCart} from "../../redux/redux_tuyen/Action_Tuyen";
 import {PopularCode} from "../ListProductsPage/Products";
-import SectionBreadcrumb from "../Commons/SectionBreadcrumb";
 import {fetchCodes, putCodes} from "../../javascript/api/Api_Dat";
+import SectionBreadcrumb from "../Commons/SectionBreadcrumb";
 
 function DetailLeft({product}) {
     const [slideIndex, setSlideIndex] = useState(0)
@@ -478,7 +478,7 @@ export default function ProductDetails() {
     return (
         <>
             <SectionBreadcrumb breadcrumbs={breadcrumbs()}/>
-            <section className="product-details my-5">
+            <section className="product-details">
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-9">

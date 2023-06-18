@@ -84,8 +84,10 @@ function SectionCart() {
 function ItemCart({product}) {
 
     const styleImage = {
-        width: '60%',
-        height: '60%'
+        width: '100%',
+        height: '100%',
+        maxWidth: '150px',
+        maxHeight: '150px',
     }
 
     const dispatch = useDispatch(); // dùng để gửi Action đến Store
@@ -110,9 +112,14 @@ function ItemCart({product}) {
 
     return (
         <tr>
-            <td><img src={`${product.img}`} style={styleImage} alt=""/></td>
+            <td><Link to={`/products/product/${product.id}`} state={product}>
+                <img src={`${product.img}`}
+                     style={styleImage} alt=""/></Link></td>
             <td className="shoping__cart__item">
-                <h5>{`${product.name}`}</h5>
+                <Link to={`/products/product/${product.id}`} state={product}>
+                    <h5 onMouseOver={(e) => e.target.style.color = '#7fad39'}
+                        onMouseOut={(e) => e.target.style.color = 'black'}>{product.name}</h5>
+                </Link>
             </td>
             <td className="shoping__cart__price">
                 {formatCurrency(product.price)}

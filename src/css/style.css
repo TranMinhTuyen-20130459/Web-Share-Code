@@ -1,6 +1,7 @@
 @import url(https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css);
 @import url(https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap);
 @import url(https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Roboto:wght@100;300;400;500;700;900&display=swap);
+@import url(https://fonts.googleapis.com/css?family=Exo+2:400,900,800,700,600,500,300,200,100);
 
 :root {
     --color-main: #7fad39;
@@ -3706,4 +3707,59 @@ li {
 
 .profile .nice-select:focus {
     border-color: #9ecb59;
+}
+
+/* [ Breadcrumb ]
+--------------------------------*/
+
+.my-breadcrumb {
+    padding: 16px 0;
+}
+
+.my-breadcrumb li {
+    display: inline-block;
+    color: #5f6368;
+    font-family: 'Roboto', sans-serif;
+}
+
+.my-breadcrumb li a {
+    color: inherit;
+    transition: .2s;
+}
+
+.my-breadcrumb li a i {
+    padding: 0 16px;
+    font-size: 14px;
+    color: #5f6368 !important;
+}
+
+.my-breadcrumb li:hover a {
+    color: var(--color-main);
+}
+
+/* [ Banner Left ]
+--------------------------------*/
+
+.banner-left a {
+    color: #333333;
+    transition: .1s;
+}
+
+.banner-left a:hover {
+    background-color: #A9D961CC;
+    border-color: #A9D961CC;
+    color: rgba(37, 56, 10, 0.8);
+}
+
+.banner-left a i {
+    color: #ec964f;
+    margin-right: 6px;
+}
+
+/* [ Banner Right ]
+--------------------------------*/
+
+.banner-right img {
+    height: 442px;
+    width: 92%;
 }

@@ -1,20 +1,13 @@
-import {Link} from "react-router-dom";
+import React from "react";
 
-function SectionBreadcrumb(props) {
-
-    const styleBreadcrumb = {display: "flex", justifyContent: "center"}
-
+function SectionBreadcrumb({breadcrumbs}) {
     return (
-        <div className="container">
-            <nav aria-label="breadcrumb">
-                <ol className="breadcrumb" style={styleBreadcrumb}>
-                    {props.breadcrumbs.map((breadcrumb, index) => (
-                        <li className="breadcrumb-item" key={index}>
-                            <Link to={breadcrumb.link}>{breadcrumb.name}</Link>
-                        </li>
-                    ))}
-                </ol>
-            </nav>
+        <div className="my-breadcrumb">
+            <ul className="container">
+                {breadcrumbs.map((value, index) => (
+                    <li key={index}><a href={value.link}>{index > 0 && <i className="fa fa-chevron-right"></i>} {value.name}</a></li>
+                ))}
+            </ul>
         </div>
     )
 }

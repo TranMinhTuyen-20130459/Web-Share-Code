@@ -164,12 +164,12 @@ function ItemProductFeatured({product}) {
             </div>
 
             <div className="product-item">
-                <Link to={`product/${product.id}`} state={product} className="product-item-img">
+                <Link to={`products/product/${product.id}`} state={product} className="product-item-img">
                     <img src={product.img} alt=""/>
                 </Link>
                 <div className="product-item-title d-flex justify-content-center align-items-center text-center pt-2">
                     <div className="title-wrapper">
-                        <Link to={`product/${product.id}`} state={product}>{product.name}</Link>
+                        <Link to={`products/product/${product.id}`} state={product}>{product.name}</Link>
                     </div>
                 </div>
                 <div className="product-item-stats d-flex justify-content-between">
@@ -186,7 +186,7 @@ function ItemProductFeatured({product}) {
                 </div>
                 <div className="product-item-bottom d-flex justify-content-between align-items-center">
                     <div className="product-item-brand"><i className={product.type.icon}></i> {product.type.name}</div>
-                    <Link to={`product/${product.id}`} state={product}
+                    <Link to={`products/product/${product.id}`} state={product}
                           className="product-item-price">{formatNumber(product.price, '.')}đ</Link>
                 </div>
             </div>
